@@ -12,6 +12,10 @@ from sklearn.metrics import plot_confusion_matrix
 
 ```
 
+    The autoreload extension is already loaded. To reload it, use:
+      %reload_ext autoreload
+    
+
 
 ```python
 warnings.filterwarnings("ignore")
@@ -303,7 +307,7 @@ X_test.head()
 
 
 ```python
-modelos = Modelos()
+modelos = Modelos(X_train = X_train,y_train = y_train)
 ```
 
 TREINANDO MODELO SVM
@@ -333,7 +337,7 @@ plot_confusion_matrix(clf_svm,X_test,y_teste,display_labels=['Negativo','Positiv
 
 
 
-    <sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x1fc8d137c18>
+    <sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x26223420cf8>
 
 
 
@@ -350,14 +354,6 @@ TREINANDO MODELO NN
 nn = Modelos.NN(Modelos,X_train,y_train)
 ```
 
-    WARNING:tensorflow:From C:\Users\sodre\anaconda3\envs\TCC\lib\site-packages\tensorflow_core\python\ops\resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
-    Instructions for updating:
-    If using Keras pass *_constraint arguments to layers.
-    WARNING:tensorflow:From C:\Users\sodre\anaconda3\envs\TCC\lib\site-packages\tensorflow_core\python\ops\math_grad.py:1424: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
-    Instructions for updating:
-    Use tf.where in 2.0, which has the same broadcast rule as np.where
-    
-
 
 ```python
 y_predict = nn.predict(X_test.to_numpy())
@@ -369,16 +365,17 @@ y_predict_1 =  np.where(y_predict  > 0.5, 1, 0)
 print(y_predict[0:5])
 ```
 
-    [[0.4399853 ]
-     [0.44380516]
-     [0.44583258]
-     [0.49196762]
-     [0.45100433]]
+    [[0.4831077 ]
+     [0.500621  ]
+     [0.49625027]
+     [0.5115009 ]
+     [0.47208115]]
     
 
 
 ```python
 Tratamento.confusion(Tratamento,y_teste.astype(int),y_predict_1)
+
 ```
 
 
@@ -386,3 +383,8 @@ Tratamento.confusion(Tratamento,y_teste.astype(int),y_predict_1)
 ![png](README_files/README_20_0.png)
     
 
+
+
+```python
+
+```
