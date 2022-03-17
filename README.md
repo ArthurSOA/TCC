@@ -12,10 +12,6 @@ from sklearn.metrics import plot_confusion_matrix
 
 ```
 
-    The autoreload extension is already loaded. To reload it, use:
-      %reload_ext autoreload
-    
-
 
 ```python
 warnings.filterwarnings("ignore")
@@ -26,7 +22,10 @@ tratamento = Tratamento()
 
 ```python
 amostras = tratamento.amostras_import()
+
 ```
+
+IMPORTANDO AS AMOSTRAS 
 
 
 ```python
@@ -205,6 +204,8 @@ amostras.head()
 
 
 
+SELECIONANDO OS VALORES DE REFLECTÂNCIA DE APENAS ALGUMAS FREQUÊNCIAS
+
 
 ```python
 amostra_freq = tratamento.get_frequencies(amostras=amostras,freq=[900.0,1000.0,1100.0,'Diagnostico'])        
@@ -223,6 +224,8 @@ amostra_freq.shape
     (365, 4)
 
 
+
+SEPARANDO AS AMOSTRAS EM TREINAMENTO E TESTE
 
 
 ```python
@@ -303,6 +306,8 @@ X_test.head()
 modelos = Modelos()
 ```
 
+TREINANDO MODELO SVM
+
 
 ```python
 clf_svm = modelos.SVM(X_train,y_train)
@@ -328,130 +333,56 @@ plot_confusion_matrix(clf_svm,X_test,y_teste,display_labels=['Negativo','Positiv
 
 
 
-    <sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x26223420cf8>
+    <sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x1fc8d137c18>
 
 
 
 
     
-![png](README_files/README_11_1.png)
+![png](README_files/README_15_1.png)
     
 
+
+TREINANDO MODELO NN
 
 
 ```python
 nn = Modelos.NN(Modelos,X_train,y_train)
 ```
 
-    Train on 328 samples
-    328/328 [==============================] - 0s 247us/sample - loss: 0.4584 - acc: 0.8567
+    WARNING:tensorflow:From C:\Users\sodre\anaconda3\envs\TCC\lib\site-packages\tensorflow_core\python\ops\resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+    Instructions for updating:
+    If using Keras pass *_constraint arguments to layers.
+    WARNING:tensorflow:From C:\Users\sodre\anaconda3\envs\TCC\lib\site-packages\tensorflow_core\python\ops\math_grad.py:1424: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+    Instructions for updating:
+    Use tf.where in 2.0, which has the same broadcast rule as np.where
     
 
 
 ```python
 y_predict = nn.predict(X_test.to_numpy())
-y_predict =  np.where(y_predict  > 0.8, 1, 0)
+y_predict_1 =  np.where(y_predict  > 0.5, 1, 0)
 ```
-
-
-    ---------------------------------------------------------------------------
-
-    ValueError                                Traceback (most recent call last)
-
-    ~\AppData\Local\Temp\ipykernel_17980\2666386173.py in <module>
-          1 y_predict = nn.predict(X_test.to_numpy())
-    ----> 2 y_predict =  [1 if y_predict > 0.8 else 0 for i in y_predict]
-    
-
-    ~\AppData\Local\Temp\ipykernel_17980\2666386173.py in <listcomp>(.0)
-          1 y_predict = nn.predict(X_test.to_numpy())
-    ----> 2 y_predict =  [1 if y_predict > 0.8 else 0 for i in y_predict]
-    
-
-    ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
-
 
 
 ```python
-print(y_predict)
+print(y_predict[0:5])
 ```
 
-    [[0.12233434]
-     [0.14454965]
-     [0.09601983]
-     [0.05331418]
-     [0.17845728]
-     [0.12307519]
-     [0.1846591 ]
-     [0.2425992 ]
-     [0.14324473]
-     [0.24438292]
-     [0.0524053 ]
-     [0.13760446]
-     [0.1029557 ]
-     [0.14904301]
-     [0.13196225]
-     [0.04016168]
-     [0.08953942]
-     [0.04291432]
-     [0.16743301]
-     [0.12837915]
-     [0.13579781]
-     [0.10452837]
-     [0.14727008]
-     [0.15109141]
-     [0.18328767]
-     [0.15013738]
-     [0.31020132]
-     [0.06078754]
-     [0.07435106]
-     [0.0638345 ]
-     [0.05720014]
-     [0.11450051]
-     [0.13751693]
-     [0.11014868]
-     [0.18291213]
-     [0.17337595]
-     [0.04681817]]
+    [[0.4399853 ]
+     [0.44380516]
+     [0.44583258]
+     [0.49196762]
+     [0.45100433]]
     
 
 
 ```python
-Tratamento.confusion(Tratamento,y_teste,y_predict)
+Tratamento.confusion(Tratamento,y_teste.astype(int),y_predict_1)
 ```
 
 
-    ---------------------------------------------------------------------------
-
-    ValueError                                Traceback (most recent call last)
-
-    ~\AppData\Local\Temp\ipykernel_17980\3896479208.py in <module>
-    ----> 1 Tratamento.confusion(Tratamento,y_teste,y_predict)
     
-
-    c:\Users\sodre\Estocasticos\tratamento_module.py in confusion(self, y_true, y_predict)
-         49 
-         50     def confusion(self,y_true,y_predict):
-    ---> 51         cm = confusion_matrix(y_true,y_predict)
-         52         fig,ax = plt.subplots(figsize = (7.5,7,5))
-         53         ax.matshow(cm, cmap=plt.cm.Blues, alpha=0.3)
+![png](README_files/README_20_0.png)
     
-
-    ~\anaconda3\envs\TCC\lib\site-packages\sklearn\metrics\_classification.py in confusion_matrix(y_true, y_pred, labels, sample_weight, normalize)
-        305     (0, 2, 1, 1)
-        306     """
-    --> 307     y_type, y_true, y_pred = _check_targets(y_true, y_pred)
-        308     if y_type not in ("binary", "multiclass"):
-        309         raise ValueError("%s is not supported" % y_type)
-    
-
-    ~\anaconda3\envs\TCC\lib\site-packages\sklearn\metrics\_classification.py in _check_targets(y_true, y_pred)
-         93         raise ValueError(
-         94             "Classification metrics can't handle a mix of {0} and {1} targets".format(
-    ---> 95                 type_true, type_pred
-         96             )
-         97         )
-    
-
-    ValueError: Classification metrics can't handle a mix of binary and continuous targets
 
