@@ -132,7 +132,7 @@ class Tratamento:
     def confusion(self,y_true,y_predict,fig_name ="confusion.png" ):
         cm = confusion_matrix(y_true,y_predict)
         class_names= ['Negativo','Positivo']
-        fig, ax = plot_confusion_matrix(conf_mat=cm, figsize=(2, 2), cmap=plt.cm.Greens,
+        fig, ax = plot_confusion_matrix(conf_mat=cm, figsize=(4, 4), cmap=plt.cm.Greens,
                                         class_names = class_names)
         ax
         plt.xlabel('Predições', fontsize=12)
@@ -162,7 +162,7 @@ class Tratamento:
         colors = ['r','b']
         plt.figure(figsize = (8,8))
         for i in range(len(fpr)):
-            plt.plot(fpr[i], tpr[i], colors[i],label=Names[i] + " Área: " + str(auc[i]))
+            plt.plot(fpr[i], tpr[i], colors[i],label=Names[i] + " Área: " + str("{:.2f}".format(auc[i])))
        
         plt.legend(loc="lower right")
         plt.title("Curva ROC RNA" + " "+ name_curve, fontsize = 15)
