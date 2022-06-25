@@ -24,6 +24,7 @@ class Tratamento:
     def __init__(self):
         self.path_positivo =  'Dados/compilado_positivo.xlsx'
         self.path_negativo = 'Dados/compilado_negativo.xlsx'
+        self.path_figuras = 'Figuras/'
 
 
 
@@ -138,7 +139,7 @@ class Tratamento:
         plt.xlabel('Predições', fontsize=12)
         plt.ylabel('Verdadeiros', fontsize=12)
         plt.title('Matriz de confusão', fontsize=12)
-        plt.savefig(fig_name, bbox_inches = 'tight')
+        plt.savefig(self.path_figuras+ fig_name, bbox_inches = 'tight')
         plt.show()
         
         return
@@ -169,6 +170,6 @@ class Tratamento:
         plt.xlabel("Falsos Positivos",fontsize = 15)
         plt.ylabel("Verdadeiros Positivos", fontsize = 15)
         plt.grid()
-        plt.savefig(name_curve+'.png', bbox_inches = 'tight')
+        plt.savefig(self.path_figuras + name_curve+'.png', bbox_inches = 'tight')
         plt.show()
 
